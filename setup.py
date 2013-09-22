@@ -29,7 +29,7 @@ setup(
         'git2json',
     ],
     package_dir={'git2json': 'git2json'},
-    entry_points={'git2json': 'git2json.main'},
+    entry_points={'console_scripts': ['git2json = git2json:main']},
     include_package_data=True,
     install_requires=[
     ],
