@@ -187,5 +187,9 @@ def git2json(fil):
 
 
 def main():
-    from sys import stdin
-    print git2json(stdin)
+    import subprocess
+    raw_git_log = subprocess.Popen(
+        ['git', 'log', '--numstat', '--pretty=raw'],
+        stdout=subprocess.PIPE
+    )
+    print git2json(raw_git_log.stdout)
