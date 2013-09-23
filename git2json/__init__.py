@@ -186,10 +186,30 @@ def git2json(fil):
     return json.dumps(parse_commits(lines))
 
 
-def main():
+def run_git_log(git_dir=None):
+    '''run_git_log([git_dir]) -> File
+
+    Run `git log --numstat --pretty=raw` on the specified
+    git repository and return its stdout as a pseudo-File.'''
     import subprocess
+    if git_dir:
+        command = ['git', '--git-dir=' + git_dir, 'log', '--numstat', '--pretty=raw']
+    else:
+        command = ['git', 'log', '--numstat', '--pretty=raw']
     raw_git_log = subprocess.Popen(
-        ['git', 'log', '--numstat', '--pretty=raw'],
+        command,
         stdout=subprocess.PIPE
     )
-    print git2json(raw_git_log.stdout)
+    return raw_git_log.stdout
+
+
+def main():
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        '--git-dir',
+        default=None,
+        help='Path to the .git/ directory of the repository you are targeting'
+    )
+    args = parser.parse_args()
+    print git2json(run_git_log(args.git_dir))
