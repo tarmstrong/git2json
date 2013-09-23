@@ -24,14 +24,18 @@ def parse_hash_line(line, name):
     else:
         return result.groups()[0]
 
+
 def parse_commit_line(line):
     return parse_hash_line(line, 'commit')
+
 
 def parse_parent_line(line):
     return parse_hash_line(line, 'parent')
 
+
 def parse_tree_line(line):
     return parse_hash_line(line, 'tree')
+
 
 def parse_person_line(line, name):
     RE_PERSON = name + r' (.+) <(.*)> (\d+) ([+\-]\d\d\d\d)'
@@ -45,18 +49,21 @@ def parse_person_line(line, name):
         timestamp = int(groups[2])
         timezone = groups[3]
         d_result = {
-                'name': name,
-                'email': email,
-                'date': timestamp,
-                'timezone': timezone,
-                }
+            'name': name,
+            'email': email,
+            'date': timestamp,
+            'timezone': timezone,
+        }
         return d_result
+
 
 def parse_committer_line(line):
     return parse_person_line(line, 'committer')
 
+
 def parse_author_line(line):
     return parse_person_line(line, 'author')
+
 
 def parse_message_line(line):
     RE_MESSAGE = r'    (.*)'
@@ -65,6 +72,7 @@ def parse_message_line(line):
         return result
     else:
         return result.groups()[0]
+
 
 def parse_numstat_line(line):
     RE_NUMSTAT = r'(\d+|-)\W+(\d+|-)\W+(.*)'
@@ -78,11 +86,13 @@ def parse_numstat_line(line):
         except ValueError:
             return (sadd, sdel, fname)
 
+
 def parse_blank_line(line):
     if len(line) == 1 and line == '\n':
         return True
     else:
         return None
+
 
 def parse_commits(lines):
     '''Read lines from the git log one at a time.
@@ -90,19 +100,18 @@ def parse_commits(lines):
     This parser is hand-rolled and shouldn't be.'''
     lines = iter(lines)
     parsers = [
-            (parse_commit_line, 1),
-            (parse_tree_line, 1),
-            (parse_parent_line, 1),
-            (parse_author_line, 1),
-            (parse_committer_line, 1),
-            (parse_blank_line, 1),
-            (parse_message_line, 0),
-            (parse_blank_line, 1),
-            (parse_numstat_line, 0),
-            ]
+        (parse_commit_line, 1),
+        (parse_tree_line, 1),
+        (parse_parent_line, 1),
+        (parse_author_line, 1),
+        (parse_committer_line, 1),
+        (parse_blank_line, 1),
+        (parse_message_line, 0),
+        (parse_blank_line, 1),
+        (parse_numstat_line, 0),
+    ]
     iparsers = cycle(iter(parsers))
     parsed_lines = []
-    count_mesg_lines = 0
     prev_line = None
     try:
         line = lines.next()
@@ -136,9 +145,9 @@ def parse_commits(lines):
 
     def empty_commit():
         return {
-                'changes': [],
-                'message': '',
-                }
+            'changes': [],
+            'message': '',
+        }
     final_commits = []
     current_commit = None
     for name, data in parsed_lines:
@@ -166,13 +175,16 @@ def parse_commits(lines):
     final_commits.append(current_commit)
     return final_commits
 
+
 def git2jsons(s):
     lines = s.split('\n')
     return json.dumps(parse_commits(lines))
 
+
 def git2json(fil):
     lines = fil.xreadlines()
     return json.dumps(parse_commits(lines))
+
 
 def main():
     from sys import stdin
