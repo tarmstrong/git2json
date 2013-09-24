@@ -193,7 +193,13 @@ def run_git_log(git_dir=None):
     git repository and return its stdout as a pseudo-File.'''
     import subprocess
     if git_dir:
-        command = ['git', '--git-dir=' + git_dir, 'log', '--numstat', '--pretty=raw']
+        command = [
+            'git',
+            '--git-dir=' + git_dir,
+            'log',
+            '--numstat',
+            '--pretty=raw'
+        ]
     else:
         command = ['git', 'log', '--numstat', '--pretty=raw']
     raw_git_log = subprocess.Popen(
