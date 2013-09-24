@@ -78,8 +78,7 @@ Ready to contribute? Here's how to set up `git2json` for local development.
 tests, including testing other Python versions with tox::
 
     $ flake8 git2json tests
-	  $ python setup.py test
-    $ tox
+	  $ python setup.py nosetests
 
   To get flake8 and tox, just pip install them into your virtualenv. 
 
@@ -100,13 +99,7 @@ Before you submit a pull request, check that it meets these guidelines:
 2. If the pull request adds functionality, the docs should be updated. Put
    your new functionality into a function with a docstring, and add the
    feature to the list in README.rst.
-3. The pull request should work for Python 2.6, 2.7, and 3.3, and for PyPy. Check 
+3. The pull request should work for Python 2.6 and 2.7 (in the future 3.x and PyPy will be supported). Check 
    https://travis-ci.org/tarmstrong/git2json/pull_requests
    and make sure that the tests pass for all supported Python versions.
 
-Tips
-----
-
-To run a subset of tests::
-
-	$ python -m unittest tests.test_git2json
