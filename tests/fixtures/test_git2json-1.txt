@@ -1,0 +1,126 @@
+commit b8295e9af6745b9c466d11bb31a6eef221e231c1
+tree ea7fbb2694175423d776f649104ba42520db7cea
+parent 795c9e30ee8ad2e1a4e780c439fc50b565670e26
+parent 796a90bdeef377041c353019fdae19aaa72a76d3
+author Fernando Perez <fernando.perez@berkeley.edu> 1380325308 -0700
+committer Fernando Perez <fernando.perez@berkeley.edu> 1380325308 -0700
+
+    Merge pull request #4294 from minrk/tornado-2
+    
+    don't require tornado 3 in `--post serve`
+
+commit 796a90bdeef377041c353019fdae19aaa72a76d3
+tree ea7fbb2694175423d776f649104ba42520db7cea
+parent 795c9e30ee8ad2e1a4e780c439fc50b565670e26
+author MinRK <benjaminrk@gmail.com> 1380325245 -0700
+committer MinRK <benjaminrk@gmail.com> 1380325245 -0700
+
+    don't require tornado 3 in `--post serve`
+    
+    tornado.log is new in 3.0
+
+6	2	IPython/nbconvert/postprocessors/serve.py
+
+commit 795c9e30ee8ad2e1a4e780c439fc50b565670e26
+tree 6bfc9895c0a2219ffafa562ff1c403f06374e544
+parent 505d3bd256ee7318bc05c047da5425db89006245
+parent b0d6287174b62de9b89190b868317d12b5bc4ae4
+author Min RK <benjaminrk@gmail.com> 1380323422 -0700
+committer Min RK <benjaminrk@gmail.com> 1380323422 -0700
+
+    Merge pull request #4270 from minrk/task-timeout
+    
+    adjust Scheduler timeout logic
+    
+    Timeout starts when task submission is attempted. That is, it starts each time in resubmit / retry cases.
+    
+    Avoids issues of timeout firing only once while a task is pending, when it might come back and be retried after the timeout has fired.
+    
+    Also adds a ten second timeout for sync calls in the tests, which should hopefully avoid hangs when things are misbehaving.
+    
+    closes #3210
+
+commit 505d3bd256ee7318bc05c047da5425db89006245
+tree 43fb1288ede8d108aab70924a7be31d48303d3a4
+parent ae73644953bf2265c93ad12694f1214eecf825ea
+parent 07b4962bd787068896f0e2b5dfb977441c7b391a
+author Matthias Bussonnier <bussonniermatthias@gmail.com> 1380301596 -0700
+committer Matthias Bussonnier <bussonniermatthias@gmail.com> 1380301596 -0700
+
+    Merge pull request #4278 from minrk/easy_install-a
+    
+    add `-a` to easy_install command in libedit warning
+
+commit ae73644953bf2265c93ad12694f1214eecf825ea
+tree 4ed874369e4e0075cb38b6db94274e7988c79eaf
+parent 8ac087cefd6db5181f85625e2524a36ff9f3ccbb
+parent e51d4d021c57c846ff1ad439d20b3fcc6b1ebc77
+author Matthias Bussonnier <bussonniermatthias@gmail.com> 1380271407 -0700
+committer Matthias Bussonnier <bussonniermatthias@gmail.com> 1380271407 -0700
+
+    Merge pull request #4282 from ellisonbg/linebreaks
+    
+    Enable automatic line breaks in MathJax.
+
+commit 8ac087cefd6db5181f85625e2524a36ff9f3ccbb
+tree 2e096e0222a4bce05276cb32d9b1adf583cf3fe4
+parent 28ebc5fce26f451e45feabfb376db1815018c334
+parent 68b0f9d2d5f29c540f7873141cb09026c492d0ef
+author Min RK <benjaminrk@gmail.com> 1380215023 -0700
+committer Min RK <benjaminrk@gmail.com> 1380215023 -0700
+
+    Merge pull request #4279 from ellisonbg/itemname
+    
+    Fixing line-height of list items in tree view.
+
+commit 28ebc5fce26f451e45feabfb376db1815018c334
+tree cecc43b0ade5722852be07c3c2263e15b350b31d
+parent 929d291e36f28148b95f71e1200174958772fa2b
+parent 4c1106f88e7864b9b235a84055e9eb36e7f2a317
+author Matthias Bussonnier <bussonniermatthias@gmail.com> 1380183460 -0700
+committer Matthias Bussonnier <bussonniermatthias@gmail.com> 1380183460 -0700
+
+    Merge pull request #4253 from Carreau/fix-4039
+    
+    fixes #4039.
+    
+    Issues is that $(selector).val() return the associated text if no data
+    is present (hence one cannot associate explicitely an option to
+    "undefined")
+    
+    fix in doc and example.
+
+commit e51d4d021c57c846ff1ad439d20b3fcc6b1ebc77
+tree 221f34bd5cf8c4e1a5e5547686e03162e257fc86
+parent a562753ffb1dc5556726dfeca9f1deff947da84a
+author Brian E. Granger <ellisonbg@gmail.com> 1380162595 -0700
+committer Brian E. Granger <ellisonbg@gmail.com> 1380162595 -0700
+
+    Enable automatic line breaks in MathJax.
+
+2	1	IPython/html/static/notebook/js/mathjaxutils.js
+
+commit 68b0f9d2d5f29c540f7873141cb09026c492d0ef
+tree 4877779a25cd192effa80a8c6c4481b0b3ce974e
+parent a562753ffb1dc5556726dfeca9f1deff947da84a
+author Brian E. Granger <ellisonbg@gmail.com> 1380158115 -0700
+committer Brian E. Granger <ellisonbg@gmail.com> 1380158115 -0700
+
+    Fixing line-height of list items in tree view.
+
+1	0	IPython/html/static/style/ipython.min.css
+1	0	IPython/html/static/style/style.min.css
+4	0	IPython/html/static/tree/less/tree.less
+
+commit 07b4962bd787068896f0e2b5dfb977441c7b391a
+tree 66e7b4569adb7a2cd78e69164240668a9af62116
+parent 929d291e36f28148b95f71e1200174958772fa2b
+author MinRK <benjaminrk@gmail.com> 1380153904 -0700
+committer MinRK <benjaminrk@gmail.com> 1380153904 -0700
+
+    add `-a` to easy_install command in libedit warning
+    
+    needed if someone has accidentally installed with pip,
+    in which case `easy_install readline` is a no-op.
+
+2	2	IPython/utils/rlineimpl.py
