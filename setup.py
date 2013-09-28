@@ -19,7 +19,7 @@ history = open('HISTORY.rst').read().replace('.. :changelog:', '')
 
 setup(
     name='git2json',
-    version='0.1.1',
+    version='0.2.0',
     description='Convert git logs to JSON for easier analysis.',
     long_description=readme + '\n\n' + history,
     author='Tavish Armstrong',
