@@ -216,4 +216,4 @@ def main():
         help='Path to the .git/ directory of the repository you are targeting'
     )
     args = parser.parse_args()
-    print git2json(run_git_log(args.git_dir))
+    print (git2json(run_git_log(args.git_dir)))
