@@ -46,7 +46,7 @@ The following shows the structure of the JSON emitted by the tool.
             "name": "Tavish Armstrong",
             "email": "tavisharmstrong@gmail.com"
         },
-        "parent": "e307663594031738c932877c8589552d5aafc953",
+        "parents": ["e307663594031738c932877c8589552d5aafc953"],
         "author": {
             "date": 1379903278,
             "timezone": "-0400",

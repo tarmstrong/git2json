@@ -100,7 +100,7 @@ def parse_commits(lines):
     parsers = [
         (parse_commit_line, 1),
         (parse_tree_line, 1),
-        (parse_parent_line, 1),
+        (parse_parent_line, 0),
         (parse_author_line, 1),
         (parse_committer_line, 1),
         (parse_blank_line, 1),
@@ -145,6 +145,7 @@ def parse_commits(lines):
         return {
             'changes': [],
             'message': '',
+            'parents': [],
         }
     final_commits = []
     current_commit = None
@@ -157,7 +158,7 @@ def parse_commits(lines):
         elif name == 'parse_tree_line':
             current_commit['tree'] = data
         elif name == 'parse_parent_line':
-            current_commit['parent'] = data
+            current_commit['parents'].append(data)
         elif name == 'parse_author_line':
             current_commit['author'] = data
         elif name == 'parse_committer_line':
@@ -180,8 +181,7 @@ def git2jsons(s):
 
 
 def git2json(fil):
-    lines = fil.xreadlines()
-    return json.dumps(parse_commits(lines))
+    return json.dumps(parse_commits(fil))
 
 
 def run_git_log(git_dir=None):
