@@ -177,11 +177,11 @@ def parse_commits(lines):
 
 def git2jsons(s):
     lines = s.split('\n')
-    return json.dumps(parse_commits(lines))
+    return json.dumps(parse_commits(lines), ensure_ascii=False)
 
 
 def git2json(fil):
-    return json.dumps(parse_commits(fil))
+    return json.dumps(parse_commits(fil), ensure_ascii=False)
 
 
 def run_git_log(git_dir=None):
