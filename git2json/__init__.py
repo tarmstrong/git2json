@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-git2json.py
-
 Generate a json log of a git repository.
 """
 
