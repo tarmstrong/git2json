@@ -17,6 +17,24 @@ Convert git logs to JSON for easier analysis.
 * Free software: BSD license
 * Documentation: http://git2json.rtfd.org.
 
+Installation
+------------
+
+The easiest way to install ``git2json`` is through pip:
+
+::
+
+    pip install git2json
+
+If you want the most up-to-date version (at a greater risk of encountering
+bugs) you can clone this repository and install it manually:
+
+::
+
+    git clone https://github.com/tarmstrong/git2json.git
+    cd git2json
+    python setup.py install
+
 Usage
 -----
 
