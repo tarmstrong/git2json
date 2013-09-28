@@ -11,13 +11,16 @@ Tests for `git2json` module.
 import git2json
 from nose.tools import eq_
 
+
 def get_tst_path():
-    '''Find where this test module is located so we can reference the fixtures folder.
+    '''Find where this test module is located so we can reference the fixtures
+    folder.
 
     Named with tst to avoid Nose's pattern-matching.'''
     import os
     tp = os.path.split(__file__)[0] + '/'
     return tp
+
 
 def int_test_parse_commits():
     '''Integration test: try to parse an entire git log from a file'''
