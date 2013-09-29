@@ -87,7 +87,7 @@ def parse_numstat_line(line):
 
 
 def parse_blank_line(line):
-    if len(line)==0 or (len(line) == 1 and line == '\n'):
+    if len(line) == 0 or (len(line) == 1 and line == '\n'):
         return True
     else:
         return None
@@ -113,7 +113,7 @@ def parse_commits(lines):
     parsed_lines = []
     prev_line = None
     try:
-        if sys.version_info < (3, 0): 
+        if sys.version_info < (3, 0):
             line = lines.next()
         else:
             line = next(lines)
