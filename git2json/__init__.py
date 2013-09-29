@@ -87,7 +87,7 @@ def parse_numstat_line(line):
 
 
 def parse_blank_line(line):
-    if len(line) == 1 and line == '\n':
+    if len(line)==0 or (len(line) == 1 and line == '\n'):
         return True
     else:
         return None
@@ -229,4 +229,7 @@ def main():
         help='Path to the .git/ directory of the repository you are targeting'
     )
     args = parser.parse_args()
-    print (git2json(run_git_log(args.git_dir)))
+    if sys.version_info < (3, 0):
+        print (git2json(run_git_log(args.git_dir)))
+    else:
+        print (git2jsons(run_git_log(args.git_dir)))
