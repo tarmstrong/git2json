@@ -12,6 +12,7 @@ __version__ = '0.1.0'
 import re
 import json
 from itertools import cycle
+import sys
 
 
 def parse_hash_line(line, name):
@@ -86,7 +87,7 @@ def parse_numstat_line(line):
 
 
 def parse_blank_line(line):
-    if len(line) == 1 and line == '\n':
+    if len(line)==0 or (len(line) == 1 and line == '\n'):
         return True
     else:
         return None
@@ -112,7 +113,10 @@ def parse_commits(lines):
     parsed_lines = []
     prev_line = None
     try:
-        line = lines.next()
+        if sys.version_info < (3, 0): 
+            line = lines.next()
+        else:
+            line = next(lines)
         for p, c in iparsers:
             if c == 1:
                 if prev_line is None:
@@ -125,7 +129,10 @@ def parse_commits(lines):
                 if result is None:
                     continue
                 parsed_lines.append((p.__name__, result,))
-                line = lines.next()
+                if sys.version_info < (3, 0):
+                    line = lines.next()
+                else:
+                    line = next(lines)
             else:
                 cont = False
                 while not cont:
@@ -136,7 +143,10 @@ def parse_commits(lines):
                     else:
                         # More lines of the same type (e.g. message lines)
                         parsed_lines.append((p.__name__, result,))
-                        line = lines.next()
+                        if sys.version_info < (3, 0):
+                            line = lines.next()
+                        else:
+                            line = next(lines)
 
     except StopIteration:
         pass
@@ -204,7 +214,10 @@ def run_git_log(git_dir=None):
         command,
         stdout=subprocess.PIPE
     )
-    return raw_git_log.stdout
+    if sys.version_info < (3, 0):
+        return raw_git_log.stdout
+    else:
+        return raw_git_log.stdout.read().decode('utf-8', 'ignore')
 
 
 def main():
@@ -216,4 +229,7 @@ def main():
         help='Path to the .git/ directory of the repository you are targeting'
     )
     args = parser.parse_args()
-    print (git2json(run_git_log(args.git_dir)))
+    if sys.version_info < (3, 0):
+        print (git2json(run_git_log(args.git_dir)))
+    else:
+        print (git2jsons(run_git_log(args.git_dir)))
