@@ -214,7 +214,10 @@ def run_git_log(git_dir=None):
         command,
         stdout=subprocess.PIPE
     )
-    return raw_git_log.stdout
+    if sys.version_info < (3, 0):
+        return raw_git_log.stdout
+    else:
+        return raw_git_log.stdout.read().decode('utf-8', 'ignore')
 
 
 def main():
