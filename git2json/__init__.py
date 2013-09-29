@@ -12,6 +12,7 @@ __version__ = '0.1.0'
 import re
 import json
 from itertools import cycle
+import sys
 
 
 def parse_hash_line(line, name):
@@ -112,7 +113,10 @@ def parse_commits(lines):
     parsed_lines = []
     prev_line = None
     try:
-        line = lines.next()
+        if sys.version_info < (3, 0): 
+            line = lines.next()
+        else:
+            line = next(lines)
         for p, c in iparsers:
             if c == 1:
                 if prev_line is None:
@@ -125,7 +129,10 @@ def parse_commits(lines):
                 if result is None:
                     continue
                 parsed_lines.append((p.__name__, result,))
-                line = lines.next()
+                if sys.version_info < (3, 0):
+                    line = lines.next()
+                else:
+                    line = next(lines)
             else:
                 cont = False
                 while not cont:
@@ -136,7 +143,10 @@ def parse_commits(lines):
                     else:
                         # More lines of the same type (e.g. message lines)
                         parsed_lines.append((p.__name__, result,))
-                        line = lines.next()
+                        if sys.version_info < (3, 0):
+                            line = lines.next()
+                        else:
+                            line = next(lines)
 
     except StopIteration:
         pass
