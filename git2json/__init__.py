@@ -245,13 +245,14 @@ class Executor(object):
         return raw_git_log.stdout.read()
 
 
-def execute_hooks(parsed_log):
+def execute_hooks(parsed_log, hooks):
     import hooks
     executor = Executor()
     hook_modules = [
         getattr(hooks, attr)
         for attr in dir(hooks)
         if '__' not in attr
+        and attr in hooks
     ]
     for hook_module in hook_modules:
         if hasattr(hook_module, 'mod_commit'):
@@ -271,11 +272,16 @@ def main():
         default=None,
         help='Path to the .git/ directory of the repository you are targeting'
     )
+    parser.add_argument(
+        '--hooks',
+        default='',
+    )
     args = parser.parse_args()
     executor = Executor(args.git_dir)
+    hooks = [hook.trim() for hook in args.hooks.split()]
     if sys.version_info < (3, 0):
         raw_log = executor.run_git_log()
-        parsed_log = parse_commits(raw_log)
+        parsed_log = parse_commits(raw_log, hooks)
         parsed_log = execute_hooks(parsed_log)
         print (json.dumps(parsed_log, ensure_ascii=False))
     else:
