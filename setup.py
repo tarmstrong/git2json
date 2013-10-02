@@ -27,6 +27,7 @@ setup(
     url='https://github.com/tarmstrong/git2json',
     packages=[
         'git2json',
+        'git2json.hooks',
     ],
     package_dir={'git2json': 'git2json'},
     entry_points={'console_scripts': ['git2json = git2json:main']},

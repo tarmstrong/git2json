@@ -16,9 +16,12 @@ def mod_commit(executor, commit_data):
     file_classes = {}
     for file in changed_files:
         contents = executor.run_git_show(commit_hash, file)
-        tree = ast.parse(contents)
-        classes = [e for e in tree.body if type(e) == ast.ClassDef]
-        names = [c.name for c in classes]
-        file_classes[file] = names
+        try:
+            tree = ast.parse(contents)
+            classes = [e for e in tree.body if type(e) == ast.ClassDef]
+            names = [c.name for c in classes]
+            file_classes[file] = names
+        except SyntaxError:
+            file_classes[file] = 'Error'
     commit_data['classes'] = file_classes
     return commit_data

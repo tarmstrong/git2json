@@ -240,26 +240,27 @@ class Executor(object):
             ]
         raw_git_log = subprocess.Popen(
             command,
-            stdout=subprocess.PIPE
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
         )
         return raw_git_log.stdout.read()
 
 
-def execute_hooks(parsed_log, hooks):
-    import hooks
-    executor = Executor()
+def execute_hooks(executor, parsed_log, enabled_hooks):
+    from . import hooks
     hook_modules = [
         getattr(hooks, attr)
         for attr in dir(hooks)
         if '__' not in attr
-        and attr in hooks
+        and attr in enabled_hooks
     ]
+    modded_log = parsed_log
     for hook_module in hook_modules:
         if hasattr(hook_module, 'mod_commit'):
             fun = getattr(hook_module, 'mod_commit')
-            parsed_log = [
+            modded_log = [
                 fun(executor, commit)
-                for commit in parsed_log
+                for commit in modded_log
             ]
     return parsed_log
 
@@ -278,11 +279,11 @@ def main():
     )
     args = parser.parse_args()
     executor = Executor(args.git_dir)
-    hooks = [hook.trim() for hook in args.hooks.split()]
+    hooks = [hook.strip() for hook in args.hooks.split()]
     if sys.version_info < (3, 0):
         raw_log = executor.run_git_log()
-        parsed_log = parse_commits(raw_log, hooks)
-        parsed_log = execute_hooks(parsed_log)
+        parsed_log = parse_commits(raw_log)
+        parsed_log = execute_hooks(executor, parsed_log, hooks)
         print (json.dumps(parsed_log, ensure_ascii=False))
     else:
         print (git2jsons(run_git_log(args.git_dir)))
