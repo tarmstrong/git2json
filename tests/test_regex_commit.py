@@ -15,7 +15,9 @@ def test_regex_only():
         '\n9\t0\tREADME.rst\n9\t0\tREADME.rst\n\n'
     )
 
-    matches = g.RE_COMMIT.findall(commit)
+    from git2json.parser import RE_COMMIT
+
+    matches = RE_COMMIT.findall(commit)
     assert len(matches) > 0
 
 
