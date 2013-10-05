@@ -25,7 +25,7 @@ def get_tst_path():
 def int_test_parse_commits():
     '''Integration test: try to parse an entire git log from a file'''
     fixture = open(get_tst_path() + 'fixtures/test_git2json-1.txt')
-    commits = git2json.parse_commits(fixture)
+    commits = list(git2json.parse_commits(fixture.read()))
     parent = commits[0]['parents']
     assert len(parent) == 2
 

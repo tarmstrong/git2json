@@ -11,8 +11,75 @@ __version__ = '0.1.0'
 
 import re
 import json
-from itertools import cycle
 import sys
+
+PAT_COMMIT = r'''
+(
+commit\ (?P<commit>[a-f0-9]+)\n
+tree\ (?P<tree>[a-f0-9]+)\n
+(?P<parents>(parent\ [a-f0-9]+\n)*)
+(?P<author>author \s+(.+)\s+<(.*)>\s+(\d+)\s+([+\-]\d\d\d\d)\n)
+(?P<committer>committer \s+(.+)\s+<(.*)>\s+(\d+)\s+([+\-]\d\d\d\d)\n)\n
+(?P<message>
+(\ \ \ \ .*\n)*
+)
+\n
+(?P<numstats>
+(^(\d+|-)\W+(\d+|-)\W+(.*)$\n)*
+)
+)
+'''
+RE_COMMIT = re.compile(PAT_COMMIT, re.MULTILINE | re.VERBOSE)
+
+#-------------------------------------------------------------------
+# Main parsing functions
+
+
+def parse_commits(data):
+    '''Accept a string and parse it into many commits.
+    Parse and yield each commit-dictionary.
+    This function is a generator.
+    '''
+    raw_commits = RE_COMMIT.finditer(data)
+    for rc in raw_commits:
+        full_commit = rc.groups()[0]
+        parts = RE_COMMIT.match(full_commit).groupdict()
+        parsed_commit = parse_commit(parts)
+        yield parsed_commit
+
+
+def parse_commit(parts):
+    '''Accept a parsed single commit. Some of the named groups
+    require further processing, so parse those groups.
+    Return a dictionary representing the completely parsed
+    commit.
+    '''
+    commit = {}
+    commit['commit'] = parts['commit']
+    commit['tree'] = parts['tree']
+    parent_block = parts['parents']
+    commit['parents'] = [
+        parse_parent_line(parentline)
+        for parentline in
+        parent_block.splitlines()
+    ]
+    commit['author'] = parse_author_line(parts['author'])
+    commit['committer'] = parse_committer_line(parts['committer'])
+    commit['message'] = "\n".join(
+        parse_message_line(msgline)
+        for msgline in
+        parts['message'].splitlines()
+    )
+    commit['changes'] = [
+        parse_numstat_line(numstat)
+        for numstat in
+        parts['numstats'].splitlines()
+    ]
+    return commit
+
+
+#-------------------------------------------------------------------
+# Parsing helper functions
 
 
 def parse_hash_line(line, name):
@@ -86,112 +153,20 @@ def parse_numstat_line(line):
             return (sadd, sdel, fname)
 
 
-def parse_blank_line(line):
-    if len(line) == 0 or (len(line) == 1 and line == '\n'):
-        return True
-    else:
-        return None
-
-
-def parse_commits(lines):
-    '''Read lines from the git log one at a time.
-
-    This parser is hand-rolled and shouldn't be.'''
-    lines = iter(lines)
-    parsers = [
-        (parse_commit_line, 1),
-        (parse_tree_line, 1),
-        (parse_parent_line, 0),
-        (parse_author_line, 1),
-        (parse_committer_line, 1),
-        (parse_blank_line, 1),
-        (parse_message_line, 0),
-        (parse_blank_line, 1),
-        (parse_numstat_line, 0),
-    ]
-    iparsers = cycle(iter(parsers))
-    parsed_lines = []
-    prev_line = None
-    try:
-        if sys.version_info < (3, 0):
-            line = lines.next()
-        else:
-            line = next(lines)
-        for p, c in iparsers:
-            if c == 1:
-                if prev_line is None:
-                    pass
-                else:
-                    line = prev_line
-                    prev_line = None
-                #line = prev_line is None and prev_line or lines.next()
-                result = p(line)
-                if result is None:
-                    continue
-                parsed_lines.append((p.__name__, result,))
-                if sys.version_info < (3, 0):
-                    line = lines.next()
-                else:
-                    line = next(lines)
-            else:
-                cont = False
-                while not cont:
-                    result = p(line)
-                    if result is None:
-                        prev_line = line
-                        cont = True
-                    else:
-                        # More lines of the same type (e.g. message lines)
-                        parsed_lines.append((p.__name__, result,))
-                        if sys.version_info < (3, 0):
-                            line = lines.next()
-                        else:
-                            line = next(lines)
-
-    except StopIteration:
-        pass
-
-    def empty_commit():
-        return {
-            'changes': [],
-            'message': '',
-            'parents': [],
-        }
-    final_commits = []
-    current_commit = None
-    for name, data in parsed_lines:
-        if name == 'parse_commit_line':
-            if current_commit is not None:
-                final_commits.append(current_commit)
-            current_commit = empty_commit()
-            current_commit['commit'] = data
-        elif name == 'parse_tree_line':
-            current_commit['tree'] = data
-        elif name == 'parse_parent_line':
-            current_commit['parents'].append(data)
-        elif name == 'parse_author_line':
-            current_commit['author'] = data
-        elif name == 'parse_committer_line':
-            current_commit['committer'] = data
-        elif name == 'parse_message_line':
-            if 'message' not in current_commit.keys():
-                current_commit['message'] = ''
-            current_commit['message'] += data
-        elif name == 'parse_numstat_line':
-            if 'changes' not in current_commit.keys():
-                current_commit['changes'] = []
-            current_commit['changes'].append(list(data))
-    final_commits.append(current_commit)
-    return final_commits
+#-------------------------------------------------------------------
+# Main API functions
 
 
 def git2jsons(s):
-    lines = s.split('\n')
-    return json.dumps(parse_commits(lines), ensure_ascii=False)
+    return json.dumps(list(parse_commits(s)), ensure_ascii=False)
 
 
 def git2json(fil):
-    return json.dumps(parse_commits(fil), ensure_ascii=False)
+    return json.dumps(list(parse_commits(fil.read())), ensure_ascii=False)
+
+
+#-------------------------------------------------------------------
+# Functions for interfacing with git
 
 
 def run_git_log(git_dir=None):
@@ -218,6 +193,10 @@ def run_git_log(git_dir=None):
         return raw_git_log.stdout
     else:
         return raw_git_log.stdout.read().decode('utf-8', 'ignore')
+
+
+#-------------------------------------------------------------------
+# Main
 
 
 def main():
