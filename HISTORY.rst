@@ -17,3 +17,9 @@ History
 ++++++++++++++++++
 
 * Parents now an array instead of a single value.
+
+0.2.1 (2013-10-07)
+++++++++++++++++++
+
+* Re-implemented parser with regular expressions.
+* Character encoding issues fixed.

@@ -6,7 +6,7 @@ Generate a json log of a git repository.
 
 __author__ = 'Tavish Armstrong'
 __email__ = 'tavisharmstrong@gmail.com'
-__version__ = '0.2.0'
+__version__ = '0.2.1'
 
 
 import json
