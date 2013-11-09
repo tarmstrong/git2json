@@ -4,6 +4,8 @@
 Generate a json log of a git repository.
 """
 
+from __future__ import print_function
+
 __author__ = 'Tavish Armstrong'
 __email__ = 'tavisharmstrong@gmail.com'
 __version__ = '0.2.2'
@@ -11,7 +13,7 @@ __version__ = '0.2.2'
 
 import json
 import sys
-from parser import parse_commits
+from .parser import parse_commits
 
 #-------------------------------------------------------------------
 # Main
@@ -27,9 +29,9 @@ def main():
     )
     args = parser.parse_args()
     if sys.version_info < (3, 0):
-        print (git2json(run_git_log(args.git_dir)))
+        print(git2json(run_git_log(args.git_dir)))
     else:
-        print (git2jsons(run_git_log(args.git_dir)))
+        print(git2jsons(run_git_log(args.git_dir)))
 
 #-------------------------------------------------------------------
 # Main API functions

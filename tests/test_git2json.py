@@ -33,7 +33,7 @@ def int_test_parse_commits():
     assert len(parent) == 1
 
     author = commits[0]['author']['name']
-    eq_(author, u'Fernando Perez')
+    eq_(author, 'Fernando Perez')
 
     email = commits[0]['author']['email']
     eq_(email.strip(), 'fernando.perez@berkeley.edu')
@@ -45,7 +45,7 @@ def int_test_parse_commits():
     eq_(email, 'benjaminrk@gmail.com')
 
     committer = commits[0]['committer']['name']
-    eq_(committer, u'Fernando Perez')
+    eq_(committer, 'Fernando Perez')
 
     email = commits[0]['committer']['email']
     eq_(email.strip(), 'fernando.perez@berkeley.edu')
