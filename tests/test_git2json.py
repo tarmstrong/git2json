@@ -58,3 +58,18 @@ def int_test_parse_commits():
 
     eq_(len(commits[0]['changes']), 0)
     eq_(len(commits[1]['changes']), 1)
+
+
+def reg_test_7_hidden_files():
+    '''Ensure leading periods in hidden file names are parsed.
+
+    Regression test for:
+    https://github.com/tarmstrong/git2json/issues/7
+    '''
+    fixture = open(get_tst_path() + 'fixtures/test_git2json-2.txt')
+    commits = list(git2json.parse_commits(fixture.read()))
+    second_commit = commits[1]
+    changes = second_commit['changes']
+    second_change = changes[1]
+    fname = second_change[2]
+    eq_(fname, '.travis.yml')
