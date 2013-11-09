@@ -8,7 +8,7 @@ from __future__ import print_function
 
 __author__ = 'Tavish Armstrong'
 __email__ = 'tavisharmstrong@gmail.com'
-__version__ = '0.2.2'
+__version__ = '0.2.3'
 
 
 import json

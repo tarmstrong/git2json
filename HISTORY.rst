@@ -28,3 +28,8 @@ History
 ++++++++++++++++++
 
 * Fix bug #7 (hidden filenames not parsed correctly): https://github.com/tarmstrong/git2json/issues/7
+
+0.2.3 (2013-11-09)
+++++++++++++++++++
+
+* Python 3 compatibility
