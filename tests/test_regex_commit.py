@@ -12,7 +12,8 @@ def test_regex_only():
         '\ncommitter Tavish Armstrong'
         ' <tavisharmstrong@gmail.com> 1380495019 -0400'
         '\n\n    Start examples section in the README\n'
-        '\n9\t0\tREADME.rst\n9\t0\tREADME.rst\n\n'
+        '\n9\t0\tREADME.rst\n9\t0\tREADME.rst\n'
+        '\n9\t0\t.travis.yml\n9\t0\t.travis.yml\n\n'
     )
 
     from git2json.parser import RE_COMMIT
