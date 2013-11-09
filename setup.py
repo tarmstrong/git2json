@@ -17,9 +17,11 @@ if sys.argv[-1] == 'publish':
 readme = open('README.rst').read()
 history = open('HISTORY.rst').read().replace('.. :changelog:', '')
 
+from git2json import __version__ as version
+
 setup(
     name='git2json',
-    version='0.2.1',
+    version=version,
     description='Convert git logs to JSON for easier analysis.',
     long_description=readme + '\n\n' + history,
     author='Tavish Armstrong',

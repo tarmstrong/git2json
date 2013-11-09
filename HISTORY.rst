@@ -23,3 +23,8 @@ History
 
 * Re-implemented parser with regular expressions.
 * Character encoding issues fixed.
+
+0.2.2 (2013-11-09)
+++++++++++++++++++
+
+* Fix bug #7 (hidden filenames not parsed correctly): https://github.com/tarmstrong/git2json/issues/7
