@@ -1,0 +1,24 @@
+commit b8295e9af6745b9c466d11bb31a6eef221e231c1
+tree ea7fbb2694175423d776f649104ba42520db7cea
+parent 795c9e30ee8ad2e1a4e780c439fc50b565670e26
+parent 796a90bdeef377041c353019fdae19aaa72a76d3
+author Fernando Perez <fernando.perez@berkeley.edu> 1380325308 -0700
+committer Fernando Perez <fernando.perez@berkeley.edu> 1380325308 -0700
+
+    Merge pull request #4294 from minrk/tornado-2
+    
+    don't require tornado 3 in `--post serve`
+
+commit 796a90bdeef377041c353019fdae19aaa72a76d3
+tree ea7fbb2694175423d776f649104ba42520db7cea
+parent 795c9e30ee8ad2e1a4e780c439fc50b565670e26
+author MinRK <benjaminrk@gmail.com> 1380325245 -0700
+committer MinRK <benjaminrk@gmail.com> 1380325245 -0700
+
+    don't require tornado 3 in `--post serve`
+    
+    tornado.log is new in 3.0
+
+6	2	IPython/nbconvert/postprocessors/serve.py
+6	2	.travis.yml
+
