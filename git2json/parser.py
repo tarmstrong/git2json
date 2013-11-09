@@ -27,7 +27,7 @@ tree\ (?P<tree>[a-f0-9]+)\n
 )
 \n
 (?P<numstats>
-(^(\d+|-)\W+(\d+|-)\W+(.*)$\n)*
+(^(\d+|-)\s+(\d+|-)\s+(.*)$\n)*
 )
 )
 '''
@@ -143,7 +143,7 @@ def parse_message_line(line):
 
 
 def parse_numstat_line(line):
-    RE_NUMSTAT = r'(\d+|-)\W+(\d+|-)\W+(.*)'
+    RE_NUMSTAT = r'(\d+|-)\s+(\d+|-)\s+(.*)'
     result = re.match(RE_NUMSTAT, line)
     if result is None:
         return result
