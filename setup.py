@@ -14,8 +14,11 @@ if sys.argv[-1] == 'publish':
     os.system('python setup.py sdist upload')
     sys.exit()
 
-readme = open('README.rst').read()
-history = open('HISTORY.rst').read().replace('.. :changelog:', '')
+with open('README.rst') as file_readme:
+    readme = file_readme.read()
+
+with open('HISTORY.rst') as file_history:
+    history = file_history.read().replace('.. :changelog:', '')
 
 setup(
     name='git2json',
