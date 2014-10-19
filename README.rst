@@ -85,7 +85,7 @@ The following shows the structure of the JSON emitted by the tool.
 Usage Examples
 ==============
 
-* [How Long Does It Take To Review an IPython Pull Request?](http://nbviewer.ipython.org/urls/raw.github.com/tarmstrong/code-analysis/master/IPythonReviewTime.ipynb) by Tavish Armstrong (git2json author)
+* `How Long Does It Take To Review an IPython Pull Request? <http://nbviewer.ipython.org/urls/raw.github.com/tarmstrong/code-analysis/master/IPythonReviewTime.ipynb>`_ by Tavish Armstrong (git2json author)
 
 If you are using ``git2json`` in interesting ways, please share and I will
 add your notebooks/blog posts/code to this list.
