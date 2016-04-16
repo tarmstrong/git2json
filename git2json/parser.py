@@ -67,11 +67,7 @@ def parse_commit(parts):
     ]
     commit['author'] = parse_author_line(parts['author'])
     commit['committer'] = parse_committer_line(parts['committer'])
-    commit['message'] = "\n".join(
-        parse_message_line(msgline)
-        for msgline in
-        parts['message'].splitlines()
-    )
+    commit['message'] = parse_message(parts['message'])
     commit['changes'] = [
         parse_numstat_line(numstat)
         for numstat in
@@ -133,13 +129,13 @@ def parse_author_line(line):
     return parse_person_line(line, 'author')
 
 
-def parse_message_line(line):
-    RE_MESSAGE = r'    (.*)'
-    result = re.match(RE_MESSAGE, line)
-    if result is None:
-        return result
+def parse_message(message):
+    RE_MESSAGE = re.compile(r'^    ', re.MULTILINE)
+    result = re.sub(RE_MESSAGE, '', message)
+    if not result or result.isspace():
+        return None
     else:
-        return result.groups()[0]
+        return result
 
 
 def parse_numstat_line(line):
