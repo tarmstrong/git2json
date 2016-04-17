@@ -16,8 +16,6 @@ install:
 
 # command to run tests, e.g. python setup.py test
 script:
-  - python setup.py nosetests --with-coverage
+  - python setup.py nosetests
   - flake8 git2json
   - flake8 tests
-after_success:
-  - coveralls

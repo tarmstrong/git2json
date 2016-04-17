@@ -5,15 +5,13 @@ Generate a json log of a git repository.
 """
 
 from __future__ import print_function
+import json
+import sys
+from .parser import parse_commits
 
 __author__ = 'Tavish Armstrong'
 __email__ = 'tavisharmstrong@gmail.com'
 __version__ = '0.2.3'
-
-
-import json
-import sys
-from .parser import parse_commits
 
 # -------------------------------------------------------------------
 # Main

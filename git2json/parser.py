@@ -9,11 +9,11 @@ These parsing functions expect output of the following command:
 
 """
 
+import re
+
 __author__ = 'Tavish Armstrong'
 __email__ = 'tavisharmstrong@gmail.com'
 __version__ = '0.2.1'
-
-import re
 
 PAT_COMMIT = r'''
 (
