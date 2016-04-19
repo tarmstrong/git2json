@@ -4,7 +4,7 @@ parent 6cbec586731b7c5f293f2a7b6c7330c7181acdfe
 author Jeremy Kemper <jeremy@bitsweat.net> 1348081584 -0700
 committer Jeremy Kemper <jeremy@bitsweat.net> 1348081584 -0700
 
-    Revert "Make sure :environment task is executed before db:schema:load or db:structure:load"
+    Revert "Make sure :environment task is executed before db:schema:load or db:structure:load"
     
     Breaks db:setup because it tries to load the environment before creating the database.
     
