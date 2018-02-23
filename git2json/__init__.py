@@ -25,11 +25,17 @@ def main():
         default=None,
         help='Path to the .git/ directory of the repository you are targeting'
     )
+    parser.add_argument(
+        '--since',
+        default=None,
+        help=('Show commits more recent than a specific date. If present, this '
+              'argument is passed through to "git log" unchecked. ')
+    )
     args = parser.parse_args()
     if sys.version_info < (3, 0):
-        print(git2json(run_git_log(args.git_dir)))
+        print(git2json(run_git_log(args.git_dir, args.since)))
     else:
-        print(git2jsons(run_git_log(args.git_dir)))
+        print(git2jsons(run_git_log(args.git_dir, args.since)))
 
 # -------------------------------------------------------------------
 # Main API functions
@@ -47,7 +53,7 @@ def git2json(fil):
 # Functions for interfacing with git
 
 
-def run_git_log(git_dir=None):
+def run_git_log(git_dir=None, git_since=None):
     '''run_git_log([git_dir]) -> File
 
     Run `git log --numstat --pretty=raw` on the specified
@@ -63,6 +69,8 @@ def run_git_log(git_dir=None):
         ]
     else:
         command = ['git', 'log', '--numstat', '--pretty=raw']
+    if git_since is not None:
+        command.append('--since=' + git_since)
     raw_git_log = subprocess.Popen(
         command,
         stdout=subprocess.PIPE
