@@ -28,8 +28,8 @@ def main():
     parser.add_argument(
         '--since',
         default=None,
-        help=('Show commits more recent than a specific date. If present, this '
-              'argument is passed through to "git log" unchecked. ')
+        help=('Show commits more recent than a specific date. If present, '
+              'this argument is passed through to "git log" unchecked. ')
     )
     args = parser.parse_args()
     if sys.version_info < (3, 0):

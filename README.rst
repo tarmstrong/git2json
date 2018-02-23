@@ -40,12 +40,17 @@ Usage
 
 ::
 
-    usage: git2json [-h] [--git-dir GIT_DIR]
+    usage: git2json [-h] [--git-dir GIT_DIR] [--since SINCE]
 
     optional arguments:
       -h, --help         show this help message and exit
       --git-dir GIT_DIR  Path to the .git/ directory of the repository you are
-                        targeting
+                         targeting
+      --since SINCE      Show commits more recent than a specific date. If
+                         present, this argument is passed through to "git log"
+                         unchecked.
+
+    usage: git2json [-h] [--git-dir GIT_DIR]
 
 
 The resulting JSON log is printed to standard output.
