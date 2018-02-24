@@ -73,3 +73,17 @@ def reg_test_7_hidden_files():
     second_change = changes[1]
     fname = second_change[2]
     eq_(fname, '.travis.yml')
+
+
+def reg_test_empty_lines():
+    '''Ensure commits with empty lines do not crash
+    git2json'''
+
+    fixture = open(get_tst_path() + 'fixtures/test_git2json-3.txt')
+
+    try:
+        commits = list(git2json.parse_commits(fixture.read()))
+    except TypeError:
+        assert False, 'Parsing commit with an empty line raised a TypeError.'
+
+    eq_(len(commits), 1)

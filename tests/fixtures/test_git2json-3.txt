@@ -1,0 +1,13 @@
+commit e04818d1b8de44d47003031791f142182320ed89
+tree 3f56c6c53f914a2ed882e32a8a3438be619f8f17
+parent 6cbec586731b7c5f293f2a7b6c7330c7181acdfe
+author Jeremy Kemper <jeremy@bitsweat.net> 1348081584 -0700
+committer Jeremy Kemper <jeremy@bitsweat.net> 1348081584 -0700
+
+    Revert "Make sure :environment task is executed before db:schema:load or db:structure:load"
+    
+    Breaks db:setup because it tries to load the environment before creating the database.
+    
+    This reverts commit 5ca11fefce6d83f5db399aa4412f1f1a0d42b2e6.
+
+2	2	activerecord/lib/active_record/railties/databases.rake
