@@ -73,3 +73,45 @@ def reg_test_7_hidden_files():
     second_change = changes[1]
     fname = second_change[2]
     eq_(fname, '.travis.yml')
+
+
+# I think git is stripping out the carriage return in the fixture files
+# so I'm going to just hardcode this fixture here.
+# In order to appease flake8 I've had to put in some line breaks in the message
+# in weird places. This makes the test kind of unreadable, but it works.
+CARRIAGE_RETURN_FIXTURE = '''commit 0829acac93a476ff5c13cb95de7ba7d00cf0c563
+tree 0a1caf6f9510fb11a8d3a6a45c4af6000d778a5e
+parent f4b6fd2ff84ee5edd261bfa9e1771326db1ed2e0
+author Tavish Armstrong <tavisharmstrong@gmail.com> 1520702534 +0000
+committer Tavish Armstrong <tavisharmstrong@gmail.com> 1520702662 +0000
+
+    Hi\rthere\n    \n    Hi\rthere
+
+2\t0\tfoo.txt
+
+commit f4b6fd2ff84ee5edd261bfa9e1771326db1ed2e0
+tree cbd2d9864b4b7e1508286ffed2e29c97cf4a6d78
+author Tavish Armstrong <tavisharmstrong@gmail.com> 1520702520 +0000
+committer Tavish Armstrong <tavisharmstrong@gmail.com> 1520702520 +0000
+
+    initial commit
+
+1\t0\tfoo.txt
+'''
+
+
+def reg_test_empty_message_lines():
+    '''Empty lines (usually caused by a carriage return) don't cause crashes.
+
+    Regression test for:
+    https://github.com/tarmstrong/git2json/issues/11
+    '''
+    fixture = CARRIAGE_RETURN_FIXTURE
+    commits = list(git2json.parse_commits(fixture))
+    eq_(2, len(commits))
+    second_commit = commits[0]
+    message = second_commit['message']
+    expected_message = '''Hi\rthere
+
+Hi\rthere'''
+    eq_(message, expected_message)

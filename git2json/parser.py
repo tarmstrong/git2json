@@ -23,7 +23,7 @@ tree\ (?P<tree>[a-f0-9]+)\n
 (?P<author>author \s+(.+)\s+<(.*)>\s+(\d+)\s+([+\-]\d\d\d\d)\n)
 (?P<committer>committer \s+(.+)\s+<(.*)>\s+(\d+)\s+([+\-]\d\d\d\d)\n)\n
 (?P<message>
-(\ \ \ \ .*\n)*
+(\ \ \ \ [^\n]*\n)*
 )
 \n
 (?P<numstats>
@@ -67,10 +67,16 @@ def parse_commit(parts):
     ]
     commit['author'] = parse_author_line(parts['author'])
     commit['committer'] = parse_committer_line(parts['committer'])
-    commit['message'] = "\n".join(
+    message_lines = [
         parse_message_line(msgline)
         for msgline in
-        parts['message'].splitlines()
+        parts['message'].split("\n")
+    ]
+    commit['message'] = "\n".join(
+        msgline
+        for msgline in
+        message_lines
+        if msgline is not None
     )
     commit['changes'] = [
         parse_numstat_line(numstat)
