@@ -49,6 +49,7 @@ Usage
       --since SINCE      Show commits more recent than a specific date. If
                          present, this argument is passed through to "git log"
                          unchecked.
+      --args SRCS        Pass additional arguments to git log
 
     usage: git2json [-h] [--git-dir GIT_DIR]
 
