@@ -56,6 +56,9 @@ def int_test_parse_commits():
     email = commits[1]['committer']['email']
     eq_(email, 'benjaminrk@gmail.com')
 
+    eq_(commits[0]['gpgsig'], None)
+    eq_(commits[1]['gpgsig'], None)
+
     eq_(len(commits[0]['changes']), 0)
     eq_(len(commits[1]['changes']), 1)
 
@@ -115,3 +118,46 @@ def reg_test_empty_message_lines():
 
 Hi\rthere'''
     eq_(message, expected_message)
+
+
+def int_test_parse_gpgsig_commit():
+    '''Read a gpg signed root commit'''
+    fixture = open(get_tst_path() + 'fixtures/test_git2json-3.txt')
+    commits = list(git2json.parse_commits(fixture.read()))
+    assert len(commits) == 1
+
+    # Root commit, no parents.
+    parent = commits[0]['parents']
+    assert len(parent) == 0
+
+    # The signature is not verified here, only extracted.
+    # The empty line is from the git output, so keeping it.
+    eq_(commits[0]['gpgsig'], '''-----BEGIN PGP SIGNATURE-----
+
+iQJFBAABCgAvFiEE1iQVyH1ESYvl05dqlOu2SaIlXnMFAl9UGW0RHG1pZ0Bqb2Vs
+cHVycmEuc2UACgkQlOu2SaIlXnMZBg/+K88Agj37hjhyuO/FlvHuh9RNVE28otSM
+SyTgzkoQE7+eUXtwRKIG24rwTnT2v9qqUCQwLeiPn+TEaeYglXfnai8vxjgI7f+J
+4RxQSTrbFtiyoLDtyuZVjuJ8ih9OjSQ0xghh05DXCuvxiaatf6diZnJqmYJTV/1f
+4zGY1qChis2y+wNSWNzP+cHCiPRuDVEAgghs4c5r7Biu4ydK1Xo27bsOOVez23o/
+uEtYR6RLkiWF2iWgXuCA+04kmcsKlmtuTDW0NeB4YpQFgNr4Jj8u2VsFyfhCaF21
+iF86oCob1+rxqsoDe938g9bXjVqyuUeZJPAl+sBR6vwApgeDHy+RCRoFp6Xc/ZCc
+DfxnVHndyre9+x5i0xasUy6dnrbQbssmH+zn3O9VqL8RZCix2iWiVcSqD2ona1f6
+o2q6nfn+L4foovVg4YiPmrepaknvsHsUwsrChVABnez34MSrgFtzPuJYHzVAhOJs
+mYx1vHVqxrsQxttogV62L7S+DA+nDoDq3Ws3zaW1bchTNZJr6pp+GMOJkZ7X/hNH
+ydIO+cCDp2UG9iwcGL9a5GYG5Di/TmasHRJULTeSTGnXK5pU/GXmkBqJi3VcRLwN
+KibkkotraTKP7JnzkYSxwmC6+3FgLxEDpJGetJB1eDgUZ1APuYqAiBLzSbYxaWFp
+TBkad9g7+Qg=
+=NuZn
+-----END PGP SIGNATURE-----''')
+
+    eq_(commits[0]['message'], '''Dummy commit text
+
+- This is a root commit, it has no parents.
+- This commit is signed using GNU Privacy Guard (GPG).
+
+See
+
+- https://en.wikipedia.org/wiki/GNU_Privacy_Guard
+- https://git-scm.com/book/en/v2/Git-Tools-Signing-Your-Work''')
+
+    eq_(len(commits[0]['changes']), 2)
