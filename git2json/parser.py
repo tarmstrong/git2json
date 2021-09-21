@@ -21,7 +21,12 @@ commit\ (?P<commit>[a-f0-9]+)\n
 tree\ (?P<tree>[a-f0-9]+)\n
 (?P<parents>(parent\ [a-f0-9]+\n)*)
 (?P<author>author \s+(.+)\s+<(.*)>\s+(\d+)\s+([+\-]\d\d\d\d)\n)
-(?P<committer>committer \s+(.+)\s+<(.*)>\s+(\d+)\s+([+\-]\d\d\d\d)\n)\n
+(?P<committer>committer \s+(.+)\s+<(.*)>\s+(\d+)\s+([+\-]\d\d\d\d)\n)
+(?P<gpgsig>gpgsig\ -----BEGIN\ PGP\ SIGNATURE-----\n
+\ \n
+(?:\ .+\n)+
+\ -----END\ PGP\ SIGNATURE-----\n)?
+\n
 (?P<message>
 (\ \ \ \ [^\n]*\n)*
 )
@@ -67,6 +72,7 @@ def parse_commit(parts):
     ]
     commit['author'] = parse_author_line(parts['author'])
     commit['committer'] = parse_committer_line(parts['committer'])
+    commit['gpgsig'] = parse_gpgsig_lines(parts['gpgsig'])
     message_lines = [
         parse_message_line(msgline)
         for msgline in
@@ -137,6 +143,15 @@ def parse_committer_line(line):
 
 def parse_author_line(line):
     return parse_person_line(line, 'author')
+
+
+def parse_gpgsig_lines(lines):
+    if lines is None:
+        return None
+    else:
+        RE_GPGSIG = r'^(?:gpgsig)? (.*)$'
+        result = re.findall(RE_GPGSIG, lines, re.MULTILINE)
+        return "\n".join(result)
 
 
 def parse_message_line(line):
