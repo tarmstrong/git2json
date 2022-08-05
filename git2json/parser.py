@@ -143,7 +143,7 @@ def parse_message_line(line):
     RE_MESSAGE = r'    (.*)'
     result = re.match(RE_MESSAGE, line)
     if result is None:
-        return result
+        return ""
     else:
         return result.groups()[0]
 
